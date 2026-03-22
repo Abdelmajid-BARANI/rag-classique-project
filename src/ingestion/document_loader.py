@@ -139,7 +139,7 @@ class DocumentLoader:
 
 if __name__ == "__main__":
     # Test du loader
-    loader = DocumentLoader("./données rag")
+    loader = DocumentLoader("./donnees rag")
     docs = loader.load_all_pdfs()
     stats = loader.get_document_stats(docs)
     print(stats)

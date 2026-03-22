@@ -40,7 +40,7 @@ def main():
     
     # 3. Charger les documents
     logger.info("\n[1/5] Chargement des documents PDF...")
-    data_source = config.get("ingestion", {}).get("data_source", "./données rag")
+    data_source = config.get("ingestion", {}).get("data_source", "./donnees rag")
     loader = DocumentLoader(data_source)
     documents = loader.load_all_pdfs()
     

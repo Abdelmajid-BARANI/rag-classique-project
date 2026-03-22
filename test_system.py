@@ -47,7 +47,7 @@ def test_document_loading():
     logger.info("Test 3: Chargement des documents...")
     try:
         from ingestion import DocumentLoader
-        loader = DocumentLoader("./données rag")
+        loader = DocumentLoader("./donnees rag")
         documents = loader.load_all_pdfs()
         logger.success(f"✓ Documents chargés: {len(documents)} fichiers")
         return True

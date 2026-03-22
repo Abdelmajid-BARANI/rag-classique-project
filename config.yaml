@@ -6,7 +6,7 @@ ingestion:
   chunk_size: 1000      # en caractères (RecursiveCharacterTextSplitter)
   chunk_overlap: 200    # en caractères
   chunk_mode: "chars"   # RecursiveCharacterTextSplitter — découpe hiérarchique
-  data_source: "./données rag"
+  data_source: "./donnees rag"
 
 # Embeddings
 embeddings:
