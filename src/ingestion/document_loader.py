@@ -1,9 +1,9 @@
 """
 Document Loader Module
 Charge les documents PDF via MinerU (magic-pdf) — extraction avancée de tableaux complexes, images et structure
+Utilise l'API Python MinerU directement (plus fiable que le subprocess CLI)
 """
 import os
-import subprocess
 import tempfile
 from typing import List, Dict
 from pathlib import Path
@@ -14,66 +14,81 @@ class DocumentLoader:
     """Classe pour charger les documents PDF via MinerU (magic-pdf)"""
 
     def __init__(self, data_dir: str):
-        """
-        Initialise le document loader
-
-        Args:
-            data_dir: Chemin vers le répertoire contenant les documents
-        """
         self.data_dir = Path(data_dir)
         if not self.data_dir.exists():
             raise ValueError(f"Le répertoire {data_dir} n'existe pas")
 
     def load_pdf(self, pdf_path: Path, output_dir: str = None) -> Dict[str, str]:
         """
-        Charge un fichier PDF via MinerU et extrait son contenu en Markdown
-        (texte, tableaux complexes, images/graphes détectés)
+        Charge un fichier PDF via l'API Python MinerU et extrait son contenu en Markdown.
 
         Args:
             pdf_path: Chemin vers le fichier PDF
-            output_dir: Répertoire de sortie MinerU (temporaire si None)
+            output_dir: Répertoire de sortie (temporaire si None)
 
         Returns:
             Dictionnaire contenant le nom du fichier et son contenu Markdown
         """
         try:
+            from magic_pdf.data.data_reader_writer import (
+                FileBasedDataWriter,
+                FileBasedDataReader,
+            )
+            from magic_pdf.data.dataset import PymuDocDataset
+            from magic_pdf.model.doc_analyze_by_custom_model import doc_analyze
+            from magic_pdf.config.enums import SupportedPdfParseMethod
+        except ImportError as e:
+            raise ImportError(
+                f"MinerU (magic-pdf) n'est pas installé ou mal configuré : {e}\n"
+                "Exécutez : pip install 'magic-pdf[full]'"
+            ) from e
+
+        try:
             use_temp = output_dir is None
             tmp_obj = tempfile.TemporaryDirectory() if use_temp else None
-            work_dir = tmp_obj.name if use_temp else output_dir
-            os.makedirs(work_dir, exist_ok=True)
+            work_dir = Path(tmp_obj.name if use_temp else output_dir)
 
-            result = subprocess.run(
-                ["magic-pdf", "-p", str(pdf_path), "-o", work_dir, "-m", "auto"],
-                capture_output=True,
-                text=True,
-                timeout=600,
-            )
+            pdf_stem = pdf_path.stem
+            md_output_dir = work_dir / pdf_stem / "auto"
+            image_dir = md_output_dir / "images"
+            md_output_dir.mkdir(parents=True, exist_ok=True)
+            image_dir.mkdir(parents=True, exist_ok=True)
 
-            # Logguer stderr même si returncode == 0 (MinerU peut échouer silencieusement)
-            if result.stdout.strip():
-                logger.debug(f"MinerU stdout: {result.stdout.strip()[:500]}")
-            if result.stderr.strip():
-                logger.warning(f"MinerU stderr: {result.stderr.strip()[:1000]}")
-            if result.returncode != 0:
-                raise RuntimeError(
-                    f"MinerU a échoué (code {result.returncode}) : {result.stderr.strip()[:500]}"
-                )
+            image_writer = FileBasedDataWriter(str(image_dir))
+            md_writer = FileBasedDataWriter(str(md_output_dir))
 
-            # Recherche récursive du fichier .md généré (structure : <work_dir>/<stem>/auto/<stem>.md)
-            md_files = list(Path(work_dir).rglob("*.md"))
-            if not md_files:
-                tree = [str(p) for p in Path(work_dir).rglob("*")]
-                logger.error(f"Contenu du répertoire de sortie MinerU : {tree[:30]}")
-                raise FileNotFoundError(
-                    f"Aucun fichier Markdown généré pour {pdf_path.name}. "
-                    f"Vérifiez que magic-pdf.json est configuré et que les modèles sont téléchargés."
-                )
-            # Prendre le .md le plus grand (contenu principal)
-            md_file = max(md_files, key=lambda f: f.stat().st_size)
+            # Lire le PDF
+            reader = FileBasedDataReader("")
+            pdf_bytes = reader.read(str(pdf_path))
+            ds = PymuDocDataset(pdf_bytes)
+
+            # Choisir le mode : texte natif ou OCR
+            parse_method = ds.classify()
+            logger.info(f"{pdf_path.name} → mode détecté : {parse_method.value}")
+
+            if parse_method == SupportedPdfParseMethod.OCR:
+                infer_result = ds.apply(doc_analyze, ocr=True)
+                pipe = infer_result.pipe_ocr_mode(image_writer)
+            else:
+                infer_result = ds.apply(doc_analyze, ocr=False)
+                pipe = infer_result.pipe_txt_mode(image_writer)
+
+            # Générer le Markdown
+            md_filename = f"{pdf_stem}.md"
+            pipe.dump_md(md_writer, md_filename, "images")
+
+            md_file = md_output_dir / md_filename
+            if not md_file.exists():
+                # Chercher n'importe quel .md généré en fallback
+                candidates = list(md_output_dir.rglob("*.md"))
+                if not candidates:
+                    raise FileNotFoundError(
+                        f"Aucun fichier Markdown généré pour {pdf_path.name}"
+                    )
+                md_file = max(candidates, key=lambda f: f.stat().st_size)
 
             md_content = md_file.read_text(encoding="utf-8")
 
-            # Nettoyage du temporaire
             if use_temp and tmp_obj:
                 tmp_obj.cleanup()
 
@@ -88,6 +103,7 @@ class DocumentLoader:
                 "metadata": {
                     "source": str(pdf_path),
                     "format": "markdown",
+                    "parse_method": parse_method.value,
                 },
             }
         except Exception as e:
