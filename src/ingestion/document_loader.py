@@ -49,20 +49,29 @@ class DocumentLoader:
                 timeout=600,
             )
 
+            # Logguer stderr même si returncode == 0 (MinerU peut échouer silencieusement)
+            if result.stdout.strip():
+                logger.debug(f"MinerU stdout: {result.stdout.strip()[:500]}")
+            if result.stderr.strip():
+                logger.warning(f"MinerU stderr: {result.stderr.strip()[:1000]}")
             if result.returncode != 0:
-                raise RuntimeError(f"MinerU a échoué : {result.stderr.strip()}")
-
-            # MinerU produit : <output_dir>/<pdf_stem>/auto/<pdf_stem>.md
-            pdf_stem = pdf_path.stem
-            md_dir = Path(work_dir) / pdf_stem / "auto"
-            md_files = list(md_dir.glob("*.md"))
-
-            if not md_files:
-                raise FileNotFoundError(
-                    f"Aucun fichier Markdown généré pour {pdf_path.name}"
+                raise RuntimeError(
+                    f"MinerU a échoué (code {result.returncode}) : {result.stderr.strip()[:500]}"
                 )
 
-            md_content = md_files[0].read_text(encoding="utf-8")
+            # Recherche récursive du fichier .md généré (structure : <work_dir>/<stem>/auto/<stem>.md)
+            md_files = list(Path(work_dir).rglob("*.md"))
+            if not md_files:
+                tree = [str(p) for p in Path(work_dir).rglob("*")]
+                logger.error(f"Contenu du répertoire de sortie MinerU : {tree[:30]}")
+                raise FileNotFoundError(
+                    f"Aucun fichier Markdown généré pour {pdf_path.name}. "
+                    f"Vérifiez que magic-pdf.json est configuré et que les modèles sont téléchargés."
+                )
+            # Prendre le .md le plus grand (contenu principal)
+            md_file = max(md_files, key=lambda f: f.stat().st_size)
+
+            md_content = md_file.read_text(encoding="utf-8")
 
             # Nettoyage du temporaire
             if use_temp and tmp_obj:
