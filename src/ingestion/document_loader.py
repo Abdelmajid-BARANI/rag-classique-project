@@ -67,10 +67,14 @@ class DocumentLoader:
             logger.info(f"{pdf_path.name} → mode détecté : {parse_method.value}")
             ocr_flag = (parse_method == SupportedPdfParseMethod.OCR)
 
-            # Ne pas passer ocr= via ds.apply() : selon la version de magic-pdf,
-            # ds.apply remaps 'ocr' en 'apply_ocr' ou pas, ce qui cause des conflits.
-            # On laisse doc_analyze utiliser son défaut et on choisit le pipe selon parse_method.
-            infer_result = ds.apply(doc_analyze)
+            # Passer ocr=False pour éviter l'init de PaddleOCR (modèles absents)
+            # Pour les PDFs texte natif, l'OCR n'est pas nécessaire
+            try:
+                infer_result = ds.apply(doc_analyze, ocr=False)
+            except TypeError:
+                # Certaines versions n'acceptent pas le kwarg ocr
+                infer_result = ds.apply(doc_analyze)
+
             if ocr_flag:
                 pipe = infer_result.pipe_ocr_mode(image_writer)
             else:
