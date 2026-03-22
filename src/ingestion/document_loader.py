@@ -65,12 +65,15 @@ class DocumentLoader:
             # Choisir le mode : texte natif ou OCR
             parse_method = ds.classify()
             logger.info(f"{pdf_path.name} → mode détecté : {parse_method.value}")
+            ocr_flag = (parse_method == SupportedPdfParseMethod.OCR)
 
-            if parse_method == SupportedPdfParseMethod.OCR:
-                infer_result = ds.apply(doc_analyze, ocr=True)
+            # Ne pas passer ocr= via ds.apply() : selon la version de magic-pdf,
+            # ds.apply remaps 'ocr' en 'apply_ocr' ou pas, ce qui cause des conflits.
+            # On laisse doc_analyze utiliser son défaut et on choisit le pipe selon parse_method.
+            infer_result = ds.apply(doc_analyze)
+            if ocr_flag:
                 pipe = infer_result.pipe_ocr_mode(image_writer)
             else:
-                infer_result = ds.apply(doc_analyze, ocr=False)
                 pipe = infer_result.pipe_txt_mode(image_writer)
 
             # Générer le Markdown
