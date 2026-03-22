@@ -1,0 +1,247 @@
+{
+  "info": {
+    "name": "RAG Benchmark API",
+    "description": "Collection Postman pour tester l'API RAG avec BERT, FAISS et Llama 3.1:8b",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/health",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["health"]
+        },
+        "description": "Vérifie l'état de santé de tous les composants du système RAG"
+      }
+    },
+    {
+      "name": "Get Configuration",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/config",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["config"]
+        },
+        "description": "Récupère la configuration actuelle du système"
+      }
+    },
+    {
+      "name": "Q1 - Version en vigueur Article 289",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quelle est la version en vigueur de l'Article 289 ?\",\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300\n}"
+        },
+        "url": {"raw": "http://localhost:8000/query", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["query"]},
+        "description": "Recherche la version en vigueur de l'Article 289 du CGI"
+      }
+    },
+    {
+      "name": "Q2 - Trois formats obligatoires factures électroniques",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quels sont les trois formats obligatoires pour transmettre les factures électroniques ?\",\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300\n}"
+        },
+        "url": {"raw": "http://localhost:8000/query", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["query"]},
+        "description": "Recherche les trois formats obligatoires pour la transmission des factures électroniques"
+      }
+    },
+    {
+      "name": "Q3 - Certification de sécurité exigée pour l'opérateur",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quelle certification de sécurité peut être exigée pour l'opérateur de plateforme de dématérialisation partenaire ?\",\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300\n}"
+        },
+        "url": {"raw": "http://localhost:8000/query", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["query"]},
+        "description": "Recherche la certification de sécurité exigée pour les opérateurs de PDP"
+      }
+    },
+    {
+      "name": "Q4 - Statuts de traitement obligatoires d'une facture",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quels sont les statuts de traitement obligatoires d'une facture électronique ?\",\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300\n}"
+        },
+        "url": {"raw": "http://localhost:8000/query", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["query"]},
+        "description": "Recherche les statuts obligatoires du cycle de vie d'une facture électronique"
+      }
+    },
+    {
+      "name": "Q5 - Période d'audit pour première immatriculation",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Sur quelle période porte l'audit pour une première immatriculation ?\",\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300\n}"
+        },
+        "url": {"raw": "http://localhost:8000/query", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["query"]},
+        "description": "Recherche la période couverte par l'audit de conformité pour une première immatriculation"
+      }
+    },
+    {
+      "name": "Q6 - Objectif directive 2010/45/UE",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quel est l'un des objectifs de la directive 2010/45/UE du 13 juillet 2010 ?\",\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300\n}"
+        },
+        "url": {"raw": "http://localhost:8000/query", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["query"]},
+        "description": "Recherche les objectifs de la directive européenne sur la facturation électronique"
+      }
+    },
+    {
+      "name": "Q7 - Obligation d'identification des plateformes partenaires",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quelle obligation d'identification est prévue pour les plateformes de dématérialisation partenaires ?\",\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300\n}"
+        },
+        "url": {"raw": "http://localhost:8000/query", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["query"]},
+        "description": "Recherche les obligations d'identification électronique des plateformes partenaires (Article 242 nonies F)"
+      }
+    },
+    {
+      "name": "Q8 - Délai de conservation des factures électroniques",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quel est le délai de conservation des factures électroniques prévu par le CGI ?\",\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300\n}"
+        },
+        "url": {"raw": "http://localhost:8000/query", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["query"]},
+        "description": "Recherche le délai légal de conservation des factures électroniques"
+      }
+    },
+    {
+      "name": "Q9 - Conditions d'immatriculation plateforme partenaire",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quelles sont les conditions pour obtenir l'immatriculation en tant que plateforme de dématérialisation partenaire ?\",\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300\n}"
+        },
+        "url": {"raw": "http://localhost:8000/query", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["query"]},
+        "description": "Recherche les conditions d'immatriculation des plateformes de dématérialisation partenaires (Article 242 nonies B)"
+      }
+    },
+    {
+      "name": "Q10 - Date d'entrée en vigueur facturation électronique obligatoire",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"À quelle date la facturation électronique devient-elle obligatoire pour les assujettis ?\",\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300\n}"
+        },
+        "url": {"raw": "http://localhost:8000/query", "protocol": "http", "host": ["localhost"], "port": "8000", "path": ["query"]},
+        "description": "Recherche les dates d'entrée en vigueur de l'obligation de facturation électronique"
+      }
+    },
+    {
+      "name": "Get Statistics",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/stats",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["stats"]
+        },
+        "description": "Récupère les statistiques du vector store et des évaluations"
+      }
+    },
+    {
+      "name": "Reset Metrics",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8000/reset-metrics",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["reset-metrics"]
+        },
+        "description": "Réinitialise l'historique des métriques d'évaluation"
+      }
+    },
+    {
+      "name": "Evaluate Single - RAGAS",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Quels sont les trois formats obligatoires pour transmettre les factures électroniques?\",\n  \"ground_truth\": \"Les trois formats obligatoires pour transmettre les factures électroniques sont le format structuré (UBL, CII), le format hybride (Factur-X) et le format PDF avec données lisibles.\",\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/evaluate",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["evaluate"]
+        },
+        "description": "Évalue une question avec les métriques RAGAS (Context Precision, Context Recall, Faithfulness, RAGAS Score)"
+      }
+    },
+    {
+      "name": "Evaluate Dataset - RAGAS",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"top_k\": 5,\n  \"temperature\": 0.2,\n  \"max_tokens\": 300,\n  \"max_questions\": 3\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8000/evaluate/dataset",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8000",
+          "path": ["evaluate", "dataset"]
+        },
+        "description": "Évalue le jeu de test complet (test_questions.yaml) avec les métriques RAGAS. Retourne un rapport détaillé."
+      }
+    }
+  ]
+}

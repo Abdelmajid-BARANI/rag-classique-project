@@ -1,0 +1,33 @@
+# Core Dependencies
+python-dotenv==1.0.0
+pyyaml==6.0.1
+loguru==0.7.2
+
+# Document Processing
+magic-pdf[full]>=0.10.0
+pdfplumber>=0.11.0
+langchain==0.1.0
+langchain-community==0.0.10
+
+# Embeddings & Vector Store
+sentence-transformers>=3.0.0
+transformers>=4.40.0
+torch>=2.4.0
+faiss-cpu==1.7.4
+rank-bm25==0.2.2
+huggingface-hub>=0.23.0
+
+# LLM Integration (Ollama)
+ollama==0.1.6
+requests==2.31.0
+
+# API
+fastapi==0.109.0
+uvicorn==0.27.0
+pydantic==2.5.3
+python-multipart==0.0.6
+
+# Utilities
+numpy>=1.26.0
+tqdm==4.66.1
+pandas>=2.1.4

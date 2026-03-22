@@ -1,0 +1,175 @@
+# Jeu de Test pour l'Évaluation du RAG
+# Format: Question | Mots-clés attendus | Réponse attendue (ground_truth pour RAGAS)
+
+# Questions de test sur CGI Article 289 et facturation électronique
+questions:
+  - id: 1
+    query: "C'est quoi la date de Version en vigueur de CGI_Article 289?"
+    ground_truth: "L'article 289 du CGI est en vigueur depuis le 31 décembre 2023. Il a été modifié par la LOI n°2023-1322 du 29 décembre 2023. Il traite des obligations de facturation des assujettis à la TVA."
+    keywords:
+      - "article 289"
+      - "CGI"
+      - "version"
+      - "date"
+      - "en vigueur"
+    expected_topics:
+      - "date de version"
+      - "mise à jour"
+      - "article 289"
+
+  - id: 2
+    query: "Sur quelle période porte l'audit pour une première immatriculation ?"
+    ground_truth: "Pour l'obtention du numéro d'immatriculation prévue à l'article 242 nonies B de l'annexe II au code général des impôts, l'audit de conformité porte sur les six mois précédant la date d'engagement de l'audit."
+    keywords:
+      - "audit"
+      - "période"
+      - "six mois"
+      - "première immatriculation"
+    expected_topics:
+      - "six mois"
+      - "première immatriculation"
+
+  - id: 3
+    query: "Quels sont les trois formats obligatoires pour transmettre les factures électroniques?"
+    ground_truth: "Les trois formats pour transmettre les factures électroniques sont : a) la norme d'échange Cross Industry Invoice CII élaborée par UN/CEFACT, b) le standard Universal Business Language UBL, et c) un standard de format mixte composé d'un fichier de données structuré au format XML (CII16b) et d'un fichier PDF (norme PDF/A3)."
+    keywords:
+      - "CII"
+      - "UBL"
+      - "CII16b"
+      - "PDF/A3"
+      - "UN/CEFACT"
+    expected_topics:
+      - "CII"
+      - "UBL"
+      - "Factur-X"
+      - "formats obligatoires"
+
+  - id: 4
+    query: "Quelle certification de sécurité peut être exigée pour l'opérateur ?"
+    ground_truth: "L'opérateur de plateforme de dématérialisation partenaire doit fournir une attestation de certification ISO/IEC/27001 en cours de validité relative à son système d'information, incluant l'ensemble des infrastructures, outils, services et éléments d'organisation informatique contribuant à réaliser son activité d'émission, de transmission et de réception des factures électroniques."
+    keywords:
+      - "certification"
+      - "sécurité"
+      - "opérateur"
+      - "administration fiscale"
+    expected_topics:
+      - "certification de sécurité"
+      - "opérateur"
+      - "exigences"
+
+  - id: 5
+    query: "Quel est l'un des objectifs de la directive 2010/45/UE du 13 juillet 2010 ?"
+    ground_truth: "Un des objectifs poursuivis par la directive 2010/45/UE du 13 juillet 2010 est d'encourager le recours à la facturation électronique. Elle vise également à assurer une égalité de traitement entre les factures papier et les factures électroniques."
+    keywords:
+      - "directive 2010/45/UE"
+      - "13 juillet 2010"
+      - "facturation électronique"
+      - "égalité de traitement"
+    expected_topics:
+      - "directive européenne"
+      - "facturation électronique"
+      - "égalité factures papier et électroniques"
+
+  - id: 6
+    query: "Quels contrôles doivent être mis en place pour garantir l'authenticité et l'intégrité des factures électroniques ?"
+    ground_truth: "Des contrôles documentés et permanents doivent être mis en place par l'entreprise pour garantir l'authenticité de l'origine, l'intégrité du contenu et la lisibilité des factures. Ces contrôles doivent notamment vérifier que les données de la facture sont complètes et exactes, que la facture n'a pas été modifiée, qu'elle est adressée à la bonne personne, qu'elle ne fait pas l'objet d'un double traitement, que les mentions obligatoires y figurent, et qu'elle correspond à une opération réelle. Ils permettent d'établir une piste d'audit fiable entre la facture et la livraison de biens ou prestation de services."
+    keywords:
+      - "authenticité"
+      - "intégrité"
+      - "lisibilité"
+      - "contrôles documentés"
+      - "piste d'audit fiable"
+      - "mentions obligatoires"
+    expected_topics:
+      - "authenticité et intégrité"
+      - "piste d'audit fiable"
+      - "contrôles des factures"
+      - "réalité de l'opération"
+
+  - id: 7
+    query: "Qu'est-ce qu'une plateforme de dématérialisation partenaire (PDP) ?"
+    ground_truth: "Une plateforme de dématérialisation partenaire (PDP) est un opérateur immatriculé par l'administration fiscale, tenu de proposer les services suivants : permettre à ses utilisateurs de saisir, déposer, émettre ou transmettre leurs factures électroniques en garantissant l'authenticité de l'origine, l'intégrité du contenu et la lisibilité, effectuer les contrôles prévus et identifier les destinataires des factures électroniques au moyen de l'annuaire central."
+    keywords:
+      - "PDP"
+      - "plateforme"
+      - "dématérialisation"
+      - "immatriculation"
+      - "annuaire central"
+    expected_topics:
+      - "plateforme de dématérialisation partenaire"
+      - "opérateur immatriculé"
+      - "annuaire central"
+
+  - id: 8
+    query: "Quel est le rôle du Portail Public de Facturation (PPF) ?"
+    ground_truth: "Le portail public de facturation assure les missions suivantes : 1° administrer l'annuaire central prévu au III de l'article 289 bis du code général des impôts, et 2° garantir à ses utilisateurs les fonctionnalités mentionnées à l'article 242 nonies E. Il met à jour quotidiennement l'annuaire central et transmet les données à l'administration fiscale."
+    keywords:
+      - "PPF"
+      - "portail public"
+      - "annuaire central"
+      - "article 289 bis"
+      - "article 242 nonies E"
+    expected_topics:
+      - "portail public de facturation"
+      - "annuaire central"
+      - "administration fiscale"
+
+  - id: 9
+    query: "Quelles sont les obligations de l'émetteur d'une facture électronique en matière de conservation ?"
+    ground_truth: "L'émetteur doit garantir la conservation des données de paiement transmises via le statut de traitement 'encaissée' défini à l'article 41 septies G. Il doit conserver les extractions de l'annuaire pendant une durée limitée conforme au RGPD, ainsi que les preuves d'accès à la plateforme. Les assujettis peuvent recourir au portail public de facturation pour conserver les factures pour une durée égale au délai du droit de reprise de l'administration fiscale."
+    keywords:
+      - "conservation"
+      - "encaissée"
+      - "annuaire"
+      - "droit de reprise"
+      - "article 41 septies G"
+    expected_topics:
+      - "conservation des données"
+      - "statut encaissée"
+      - "droit de reprise"
+      - "annuaire"
+
+  - id: 10
+    query: "À partir de quelle date la facturation électronique devient-elle obligatoire pour les grandes entreprises en France ?"
+    ground_truth: "Les documents décrivent le cadre général de l'obligation de facturation électronique prévue à l'article 289 bis du CGI. Les factures électroniques doivent être émises et reçues sous une forme électronique. La directive 2010/45/UE vise à encourager le recours à la facturation électronique et à assurer une égalité de traitement entre factures papier et électroniques."
+    keywords:
+      - "facturation électronique"
+      - "article 289 bis"
+      - "obligation"
+      - "directive 2010/45/UE"
+    expected_topics:
+      - "facturation électronique obligatoire"
+      - "article 289 bis"
+      - "directive 2010/45/UE"
+
+# Critères d'évaluation
+evaluation_criteria:
+  relevance:
+    description: "La réponse est-elle pertinente par rapport à la question?"
+    scale: 1-5
+    
+  faithfulness:
+    description: "La réponse est-elle fidèle aux documents sources?"
+    scale: 1-5
+    
+  completeness:
+    description: "La réponse couvre-t-elle tous les aspects importants?"
+    scale: 1-5
+    
+  clarity:
+    description: "La réponse est-elle claire et bien structurée?"
+    scale: 1-5
+    
+  keyword_coverage:
+    description: "Les mots-clés attendus sont-ils présents dans le contexte récupéré?"
+    scale: 0-1 (automatique)
+
+# Notes d'évaluation humaine (à remplir après les tests)
+human_evaluation:
+  instructions: |
+    Pour chaque question:
+    1. Lire la question
+    2. Lire la réponse générée
+    3. Vérifier les chunks récupérés
+    4. Noter selon les critères ci-dessus
+    5. Ajouter des commentaires si nécessaire

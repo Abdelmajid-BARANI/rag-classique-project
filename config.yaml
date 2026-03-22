@@ -1,0 +1,58 @@
+model_name: "mpnet_faiss_bm25_llama3.1_8b_v2"
+description: "RAG avec MPNet (768d), FAISS + BM25 Hybrid Search et Llama 3.1:8b"
+
+# Document Processing
+ingestion:
+  chunk_size: 1000      # en caractères (RecursiveCharacterTextSplitter)
+  chunk_overlap: 200    # en caractères
+  chunk_mode: "chars"   # RecursiveCharacterTextSplitter — découpe hiérarchique
+  data_source: "./données rag"
+
+# Embeddings
+embeddings:
+  model_name: "paraphrase-multilingual-mpnet-base-v2"  # Multilingue MPNet (768d) - meilleure qualité sémantique
+  # Alternatives:
+  # "paraphrase-multilingual-MiniLM-L12-v2"     -> multilingue léger (384d)
+  # "all-MiniLM-L6-v2"                          -> anglais uniquement (384d) - NE PAS utiliser pour le français
+  # "OrdalieTech/Solon-embeddings-large-0.1"    -> spécialisé droit français (1024d, changer dimension à 1024)
+  # "dangvantuan/sentence-camembert-large"      -> très bon français (1024d, changer dimension à 1024)
+  dimension: 768
+  device: "cpu"  # Change to "cuda" if GPU available
+
+# Vector Store
+vector_store:
+  type: "faiss"
+  index_type: "IndexFlatIP"  # Produit scalaire sur vecteurs normalisés = cosine similarity
+  persist_directory: "./data/vector_store"
+
+# Retrieval
+retrieval:
+  top_k: 8                     # Augmenté (5→8) pour récupérer plus de chunks pertinents
+  similarity_threshold: 0.25   # Légèrement abaissé pour ne pas manquer des articles connexes
+  search_mode: "hybrid"        # "semantic" (FAISS seul) | "hybrid" (FAISS + BM25)
+  hybrid_alpha: 0.5            # Rééquilibré (0.6→0.5) : BM25 plus fort pour les requêtes avec mots-clés juridiques précis
+  hybrid_candidate_factor: 5   # Augmenté (4→5) pour élargir les candidats avant reranking
+
+# LLM
+llm:
+  provider: "ollama"
+  model: "llama3.1:8b"
+  host: "http://localhost:11434"
+  temperature: 0.2  # Bas pour réponses factuelles et déterministes
+  max_tokens: 800   # Augmenté pour éviter les troncatures sur les réponses longues
+  
+# Evaluation RAGAS
+evaluation:
+  metrics:
+    - context_precision
+    - context_recall
+    - faithfulness
+    - ragas_score
+  llm_judge_temperature: 0.0  # Température basse pour le jugement
+  llm_judge_max_tokens: 500
+  report_output: "./logs/evaluation_report.json"
+
+# Logging
+logging:
+  level: "INFO"
+  file: "./logs/rag_benchmark.log"
